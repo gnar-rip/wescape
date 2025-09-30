@@ -48,20 +48,34 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user }) {
-      // On initial sign-in, copy custom fields to the JWT
+      // On initial login, copy values into token
       if (user) {
         token.id = (user as any).id;
         token.username = (user as any).username;
         token.defaultRSN = (user as any).defaultRSN;
+        token.name = (user as any).name;
+        token.image = (user as any).image;
+      } else {
+        // Every request, keep user data fresh from DB
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+        });
+        if (dbUser) {
+          token.username = dbUser.username;
+          token.defaultRSN = dbUser.defaultRSN;
+          token.name = dbUser.name;
+          token.image = dbUser.image;
+        }
       }
       return token;
     },
     async session({ session, token }) {
-      // Expose custom fields from the token to the client session
       if (session.user) {
         session.user.id = token.id as string;
         session.user.username = token.username as string;
         session.user.defaultRSN = token.defaultRSN as string | null;
+        session.user.name = token.name as string | null;
+        session.user.image = token.image as string | null;
       }
       return session;
     },

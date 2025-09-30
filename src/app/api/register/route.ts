@@ -15,6 +15,7 @@ export async function POST(req: Request) {
       username,
       email,
       passwordHash: hash,
+      image: "uploads/default.png",
     },
   });
 

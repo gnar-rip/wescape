@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import PlayerLookupWidget from "../components/widgets/PlayerLookupWidget";
 import PlayerStatsWidget from "../components/widgets/PlayerStatsWidget";
+import ProfileEditorModal from "../components/dashboard/ProfileEditorModal";
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
@@ -20,7 +21,6 @@ export default async function DashboardPage() {
 
   if (rsn) {
     try {
-      // Use absolute URL for server-side fetch
       const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
       const res = await fetch(`${base}/api/osrs/${encodeURIComponent(rsn)}`, {
         cache: "no-store",
@@ -28,27 +28,6 @@ export default async function DashboardPage() {
 
       if (res.ok) {
         const json = await res.json();
-        /**
-         * Your API now returns:
-         * {
-         *   username: "name",
-         *   modes: {
-         *     main: {
-         *       overall: {...},
-         *       skills: [...],
-         *       activities: [...]
-         *     }
-         *   }
-         * }
-         *
-         * PlayerStatsWidget expects:
-         * {
-         *   username: "name",
-         *   overall: {...},
-         *   skills: [...],
-         *   activities: [...]
-         * }
-         */
         const main = json?.modes?.main;
         if (main && main.overall && typeof main.overall.level === "number") {
           playerData = {
@@ -70,8 +49,10 @@ export default async function DashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto mt-16 p-6 space-y-8 text-gray-100">
-      <h1 className="text-3xl font-bold mb-4">
+      <h1 className="text-3xl font-bold mb-4 flex justify-between items-center">
         Welcome, {session.user.username}!
+        {/* 🔹 Profile editor trigger */}
+        <ProfileEditorModal user={session.user} />
       </h1>
 
       <div className="bg-gray-900 rounded-xl p-4">
