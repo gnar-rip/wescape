@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 
 import PlayerLookupWidget from "../components/widgets/PlayerLookupWidget";
 import PlayerStatsWidget from "../components/widgets/PlayerStatsWidget";
+import PlayerKCWidget from "../components/widgets/PlayerKCWidget";
 import ProfileEditorModal from "../components/dashboard/ProfileEditorModal";
 
 export default async function DashboardPage() {
@@ -13,8 +14,6 @@ export default async function DashboardPage() {
   if (!session || !session.user) {
     redirect("/signin");
   }
-
-  console.log("Dashboard session:", session);
 
   let playerData: any = null;
   const rsn = session.user.defaultRSN;
@@ -36,11 +35,7 @@ export default async function DashboardPage() {
             skills: main.skills,
             activities: main.activities,
           };
-        } else {
-          console.warn("Unexpected hiscores response:", json);
         }
-      } else {
-        console.error("Hiscores fetch failed:", res.status);
       }
     } catch (err) {
       console.error("Error fetching hiscores:", err);
@@ -48,13 +43,13 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto mt-16 p-6 space-y-8 text-gray-100">
+    <div className="max-w-6xl mx-auto mt-16 p-6 space-y-8 text-gray-100">
       <h1 className="text-3xl font-bold mb-4 flex justify-between items-center">
         Welcome, {session.user.username}!
-        {/* 🔹 Profile editor trigger */}
         <ProfileEditorModal user={session.user} />
       </h1>
 
+      {/* Info card */}
       <div className="bg-gray-900 rounded-xl p-4">
         <p>You are successfully signed in.</p>
         <p className="mt-2">
@@ -62,13 +57,16 @@ export default async function DashboardPage() {
         </p>
       </div>
 
+      {/* Player Lookup */}
       <div className="bg-gray-900 rounded-xl p-4">
         <PlayerLookupWidget />
       </div>
 
+      {/* Stats + KC */}
       {playerData ? (
-        <div className="bg-gray-900 rounded-xl p-4 overflow-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
           <PlayerStatsWidget data={playerData} />
+          <PlayerKCWidget activities={playerData.activities} />
         </div>
       ) : (
         <p className="text-gray-400">
@@ -80,5 +78,3 @@ export default async function DashboardPage() {
     </div>
   );
 }
-
-
