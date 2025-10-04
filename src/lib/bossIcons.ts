@@ -1,7 +1,7 @@
 // src/lib/bossIconMap.ts
 
 // Map boss names (as they come from the hiscores/Wise Old Man API) → local icon path
-export const bossIconMap: Record<string, string> = {
+export const bossIcons: Record<string, string> = {
   "Abyssal Sire": "/assets/icons/bosses/abyssal_sire.png",
   "Alchemical Hydra": "/assets/icons/bosses/alchemical_hydra.png",
   "Amoxliatl": "/assets/icons/bosses/amoxliatl.png",

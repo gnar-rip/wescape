@@ -13,12 +13,6 @@
     "@prisma/client": "^6.16.2",
     "bcrypt": "^6.0.0",
     "next": "15.5.4",
-<<<<<<< Updated upstream
-=======
-    "next-auth": "^4.24.11",
-    "node-fetch": "^3.3.2",
-    "osrs-json-hiscores": "^2.23.0",
->>>>>>> Stashed changes
     "next-auth": "^4.24.11",
     "node-fetch": "^3.3.2",
     "osrs-json-hiscores": "^2.23.0",
