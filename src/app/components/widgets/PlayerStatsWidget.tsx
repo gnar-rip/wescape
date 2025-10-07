@@ -17,7 +17,7 @@ export type PlayerData = {
 
 export default function PlayerStatsWidget({ data }: { data: PlayerData }) {
   return (
-    <div className="bg-gray-900 rounded-xl p-4 text-gray-100 space-y-4">
+    <div className="bg-gray-900 rounded-xl p-4 space-y-4">
       <h2 className="text-2xl font-bold text-osrsGold">Skills</h2>
 
       <div className="flex justify-between text-sm">
